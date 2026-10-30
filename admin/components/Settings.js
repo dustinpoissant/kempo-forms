@@ -73,7 +73,12 @@ export default class Settings extends ShadowComponent {
 
   connectedCallback(){
     super.connectedCallback();
-    this.load();
+    const pane = this.closest('k-tab-content');
+    // Loads when its tab is first opened, and only for someone who can read the settings: the Forms page is for everyone.
+    if(!pane || pane.active) this.load();
+    else this.closest('k-tabs')?.addEventListener('tabfirstshown', ({ detail }) => {
+      if(detail.tab === pane.name) this.load();
+    });
   }
 
   /*
@@ -81,7 +86,9 @@ export default class Settings extends ShadowComponent {
   */
 
   load = async () => {
-    this.canManage = (await permissions()).has('forms:submissions:manage');
+    const granted = await permissions();
+    if(!granted.has('forms:settings:manage')) return;
+    this.canManage = granted.has('forms:submissions:manage');
     const [error, data] = await getSettings();
     this.error = error ? error.msg : '';
     this.settings = data?.settings || [];
