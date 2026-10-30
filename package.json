@@ -62,6 +62,7 @@
     "esbuild@0.18.20": true,
     "esbuild@0.25.12": true,
     "esbuild@0.28.2": true,
-    "puppeteer@25.7.0": true
+    "puppeteer@25.7.0": true,
+    "re2@1.27.0": true
   }
 }
