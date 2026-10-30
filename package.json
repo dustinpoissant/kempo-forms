@@ -1,0 +1,67 @@
+{
+  "name": "kempo-forms",
+  "version": "0.1.0",
+  "description": "Contact and custom forms for kempo: build a form in the admin, place it on any page, keep every submission, and get it by email, with spam filters and hooks for captcha and other integrations",
+  "license": "MIT",
+  "author": "Dustin Poissant <dustinpoissant@gmail.com>",
+  "type": "module",
+  "main": "sdk.js",
+  "scripts": {
+    "test": "node scripts/run-tests.js unit kempo-test -l minimal",
+    "test:integration": "node scripts/run-tests.js integration kempo-test -l minimal -t 120000",
+    "link:local": "npm install ../kempo ../kempo-server ../kempo-ui ../kempo-files ../kempo-smtp --no-save --no-legacy-peer-deps --force"
+  },
+  "exports": {
+    "./install": "./install.js",
+    "./update": "./update.js",
+    "./uninstall": "./uninstall.js",
+    "./sdk": "./sdk.js"
+  },
+  "files": [
+    "admin",
+    "emails",
+    "hooks",
+    "jobs",
+    "public",
+    "server",
+    "install.js",
+    "update.js",
+    "uninstall.js",
+    "sdk.js",
+    "kempo-config.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dustinpoissant/kempo-forms.git"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "re2": "^1.27.0",
+    "sanitize-html": "^2.18.1"
+  },
+  "peerDependencies": {
+    "kempo": ">=4.9.10",
+    "kempo-server": ">=3.3.0",
+    "kempo-ui": ">=0.7.0"
+  },
+  "peerDependenciesMeta": {
+    "kempo-files": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.9",
+    "drizzle-kit": "^0.31.10",
+    "kempo-testing-framework": "^1.4.11",
+    "nodemailer": "^7.0.13",
+    "playwright": "^1.64.0",
+    "postgres": "^3.4.9",
+    "smtp-server": "^3.21.1"
+  },
+  "allowScripts": {
+    "esbuild@0.18.20": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true,
+    "puppeteer@25.7.0": true
+  }
+}

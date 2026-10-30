@@ -1,0 +1,50 @@
+<!--
+locked: true
+-->
+<page title="Forms - Admin">
+<content>
+  <script type="module" src="/kempo/components/Permission.js"></script>
+  <script type="module" src="/kempo/components/PermissionTarget.js"></script>
+  <script type="module" src="/kempo-ui/components/Tabs.js"></script>
+  <script type="module" src="/admin/extension/kempo-forms/components/Forms.js"></script>
+  <script type="module" src="/admin/extension/kempo-forms/components/Trash.js"></script>
+  <script type="module" src="/admin/extension/kempo-forms/components/Settings.js"></script>
+
+  <div>
+    <h1>Forms</h1>
+    <p class="tc-muted">
+      Build a form, put it on any page, and read what people send. Each form has an address of its own, and can be placed on a
+      page with an element. Submissions are kept and shown under Submissions, and can be emailed too.
+    </p>
+
+    <k-tabs id="tabs" active="forms" hash-routing>
+      <k-tab id="formsTab" for="forms">Forms</k-tab>
+      <k-tab id="trashTab" for="trash">Trash</k-tab>
+      <k-tab id="settingsTab" for="settings">Settings</k-tab>
+
+      <k-tab-content id="formsContent" name="forms">
+        <k-forms-admin-forms></k-forms-admin-forms>
+      </k-tab-content>
+
+      <k-tab-content id="trashContent" name="trash">
+        <k-forms-admin-trash></k-forms-admin-trash>
+      </k-tab-content>
+
+      <k-tab-content id="settingsContent" name="settings">
+        <k-forms-admin-settings>
+          <location name="forms-admin-settings-sections" />
+        </k-forms-admin-settings>
+      </k-tab-content>
+
+      <location name="forms-admin-tabs" />
+    </k-tabs>
+
+    <!--
+      k-tabs finds its tabs with a direct-child query, so nothing can wrap the tab and pane pairs. k-permission-target reaches in
+      by id and hides the tab and its pane in place. A courtesy only: each route checks its own permission, and that is the boundary.
+    -->
+    <k-permission-target has="forms:forms:view" target="#formsTab, #formsContent, #trashTab, #trashContent"></k-permission-target>
+    <k-permission-target has="forms:settings:manage" target="#settingsTab, #settingsContent"></k-permission-target>
+  </div>
+</content>
+</page>

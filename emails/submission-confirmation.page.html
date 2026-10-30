@@ -1,0 +1,15 @@
+<!--
+	owner: kempo-forms
+	variables:
+		formTitle: The title of the form.
+		message: The confirmation message the form sets, if any.
+		siteName: The name of the site.
+		hasMessage: True when the form has a confirmation message.
+-->
+<page template="email" title="We received your message">
+<content>
+<h2>We received your message</h2>
+<p>Thank you for contacting {{siteName}}. Your message through {{formTitle}} has been received.</p>
+<if condition="hasMessage"><p>{{message}}</p></if>
+</content>
+</page>

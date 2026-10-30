@@ -1,0 +1,22 @@
+# Database for kempo-forms' integration tier. The other kempo repos have claimed 5433-5440, 5442-5447, 5449-5451
+# and 5453-5455, so this one takes 5452 — they can all be up at once.
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kempo-forms-test-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kempo
+      POSTGRES_PASSWORD: kempo
+      POSTGRES_DB: kempo_forms_test
+    ports:
+      - "5452:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kempo"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  postgres_test_data:

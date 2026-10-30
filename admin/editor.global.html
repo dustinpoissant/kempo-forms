@@ -1,0 +1,8 @@
+<!-- Adds forms to the page editor: a button to insert one, and a card in the editor that stands for it (see kempo's registerEditorExtension). -->
+<content id="kempo-forms-editor" name="Forms in the page editor" owner="kempo-forms" enabled="true" locked="true" location="head" priority="0">
+<script type="module">
+  import { registerEditorExtension } from '/admin/component-overrides.js';
+  import '/admin/extension/kempo-forms/components/editor/InsertForm.js';
+  registerEditorExtension({ nodes: ['/admin/extension/kempo-forms/components/editor/FormNode.js'], controls: ['kc-forms-insert-form'] });
+</script>
+</content>

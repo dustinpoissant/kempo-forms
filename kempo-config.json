@@ -1,0 +1,185 @@
+{
+  "docs": "https://github.com/dustinpoissant/kempo-forms#readme",
+  "git": "https://github.com/dustinpoissant/kempo-forms",
+  "public-scope": "forms",
+  "schema": "./server/db/schema.js",
+  "jobs": [
+    {
+      "name": "sweep",
+      "every": "1m",
+      "callback": "./jobs/sweep.js"
+    }
+  ],
+  "widgets": [
+    {
+      "key": "submissions",
+      "title": "Form submissions",
+      "description": "New submissions today and this week, and the spam waiting for review.",
+      "iconSrc": "/forms/icons/forms.svg",
+      "element": "k-forms-widget",
+      "module": "/forms/components/FormsWidget.js",
+      "defaultWidth": 2,
+      "defaultHeight": 1,
+      "minWidth": 1,
+      "permission": "forms:submissions:view",
+      "priority": 76
+    }
+  ],
+  "hooks": {
+    "user:deleted": "./hooks/userDeleted.js",
+    "file:before_download": "./hooks/fileBeforeDownload.js"
+  },
+  "permissions": [
+    {
+      "name": "forms:forms:view",
+      "description": "See forms and their editor"
+    },
+    {
+      "name": "forms:forms:manage",
+      "description": "Create, edit, duplicate, pause and archive forms, restore them from the Trash and empty it"
+    },
+    {
+      "name": "forms:submissions:view",
+      "description": "See submissions, their spam verdicts and history, and export them"
+    },
+    {
+      "name": "forms:submissions:manage",
+      "description": "Change a submission's status, add notes, resend notifications, move submissions to the Trash, restore them and empty the Trash"
+    },
+    {
+      "name": "forms:settings:manage",
+      "description": "Change the forms settings"
+    }
+  ],
+  "settings": [
+    {
+      "name": "site_url",
+      "value": "http://localhost:3000",
+      "type": "string",
+      "description": "The address of this site, used for the links in emails, such as http://localhost:3000"
+    },
+    {
+      "name": "default_recipients",
+      "value": "",
+      "type": "string",
+      "description": "Comma-separated addresses that get every new submission from forms that use the site-wide recipients"
+    },
+    {
+      "name": "email_notifications",
+      "value": "false",
+      "type": "boolean",
+      "description": "Email each new submission to its recipients. Needs an email extension such as kempo-resend or kempo-smtp, and can be turned on once one is installed"
+    },
+    {
+      "name": "require_account",
+      "value": "false",
+      "type": "boolean",
+      "description": "Only signed-in people can submit a form, unless the form says otherwise"
+    },
+    {
+      "name": "spam_action",
+      "value": "spam",
+      "type": "string",
+      "description": "What happens to a submission a spam rule catches: spam keeps it for review without emailing it, reject refuses it without saving"
+    },
+    {
+      "name": "spam_rules",
+      "value": "[]",
+      "type": "json",
+      "description": "Site-wide spam rules, each a regular expression tested against the submitted values"
+    },
+    {
+      "name": "rate_limit_per_hour",
+      "value": "10",
+      "type": "number",
+      "description": "Submission attempts one visitor can make in an hour, counted whether or not they were accepted. 0 turns the limit off"
+    },
+    {
+      "name": "max_field_length",
+      "value": "5000",
+      "type": "number",
+      "description": "The most characters one field can hold, after trimming"
+    },
+    {
+      "name": "store_ip",
+      "value": "false",
+      "type": "boolean",
+      "description": "Keep the visitor's IP address with each submission. Off means it is never stored; the rate limit only keeps an unreadable hash"
+    },
+    {
+      "name": "trust_proxy",
+      "value": "false",
+      "type": "boolean",
+      "description": "Take the visitor's address from the X-Forwarded-For header. Turn this on only when the site is behind your own proxy; otherwise anyone can send that header and dodge the rate limit"
+    },
+    {
+      "name": "retention_days",
+      "value": "0",
+      "type": "number",
+      "description": "Delete submissions older than this many days. 0 keeps them forever"
+    },
+    {
+      "name": "spam_retention_days",
+      "value": "30",
+      "type": "number",
+      "description": "Delete spam older than this many days. 0 keeps it forever"
+    },
+    {
+      "name": "ip_salt",
+      "value": "",
+      "type": "string",
+      "description": "Used to hash visitor addresses for the rate limit. Made automatically; changing it only resets the counts"
+    },
+    {
+      "name": "rich_text",
+      "value": "markdown",
+      "type": "string",
+      "description": "Rich text fields: off refuses both kinds, markdown accepts markdown fields, html also accepts rich text (HTML) fields. HTML is cleaned of scripts before it is stored"
+    },
+    {
+      "name": "upload_max_bytes",
+      "value": "10485760",
+      "type": "number",
+      "description": "The largest file a visitor can send in one upload, in bytes. Needs kempo-files"
+    },
+    {
+      "name": "upload_max_files",
+      "value": "5",
+      "type": "number",
+      "description": "The most files one submission can carry. Needs kempo-files"
+    }
+  ],
+  "groups": [
+    {
+      "name": "kempo-forms:support",
+      "description": "Reads the submissions that come in and handles them, without being able to change forms",
+      "permissions": [
+        "system:admin:access",
+        "forms:submissions:view",
+        "forms:submissions:manage"
+      ]
+    },
+    {
+      "name": "kempo-forms:editor",
+      "description": "Builds forms and reads what comes in",
+      "permissions": [
+        "system:admin:access",
+        "forms:forms:view",
+        "forms:forms:manage",
+        "forms:submissions:view"
+      ]
+    },
+    {
+      "name": "kempo-forms:administrator",
+      "description": "Everything: forms, submissions and the settings",
+      "permissions": [
+        "system:admin:access",
+        "forms:forms:view",
+        "forms:forms:manage",
+        "forms:submissions:view",
+        "forms:submissions:manage",
+        "forms:settings:manage"
+      ]
+    }
+  ]
+}

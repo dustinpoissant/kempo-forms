@@ -1,0 +1,28 @@
+<!--
+	owner: kempo-forms
+	variables:
+		formTitle: The title of the form.
+		link: The link that opens the submission in the admin.
+		replyTo: The visitor's email address, when they gave one.
+		rows: Each answer, with its label and its value.
+		siteName: The name of the site.
+		submittedAt: When the form was sent.
+		hasRows: True when the submission has answers.
+		hasReplyTo: True when the visitor gave an email address.
+-->
+<page template="email" title="New submission">
+<content>
+<h2>New submission: {{formTitle}}</h2>
+<p class="tc-muted">Received {{submittedAt}} on {{siteName}}</p>
+<if condition="hasRows">
+<table class="mb">
+<foreach in="rows" as="row">
+<tr><th>{{row.label}}</th><td>{{row.html}}</td></tr>
+</foreach>
+</table>
+</if>
+<if condition="!hasRows"><p>Nothing was filled in.</p></if>
+<if condition="hasReplyTo"><p>Reply to: <a href="mailto:{{replyTo}}">{{replyTo}}</a></p></if>
+<p class="ta-center"><a class="btn primary" href="{{link}}">Open the submission</a></p>
+</content>
+</page>

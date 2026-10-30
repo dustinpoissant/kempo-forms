@@ -1,0 +1,23 @@
+{
+  "formTitle": "Contact us",
+  "link": "https://example.com/admin/extension/kempo-forms/submission/?id=abc",
+  "replyTo": "ada@example.com",
+  "rows": [
+    {
+      "label": "Name",
+      "html": "Ada Lovelace"
+    },
+    {
+      "label": "Email",
+      "html": "ada@example.com"
+    },
+    {
+      "label": "Message",
+      "html": "Hello"
+    }
+  ],
+  "siteName": "Example Shop",
+  "submittedAt": "Thu, 29 Oct 2026 21:30:00 GMT",
+  "hasRows": true,
+  "hasReplyTo": true
+}
