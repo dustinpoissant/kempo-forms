@@ -96,7 +96,7 @@ export default {
     await withSettings([['email_notifications', true, 'boolean'], ['default_recipients', 'o@example.com', 'string'], ['rich_text', 'markdown', 'string']], () =>
       send(form, { about: '**bold** <script>alert(1)</script> [x](javascript:alert(1)) [ok](https://example.com)' }));
     const html = sent[0].html;
-    if(!html.includes('<strong>bold</strong>')) return fail('markdown is rendered');
+    if(!/<strong[^>]*>bold<\/strong>/.test(html)) return fail('markdown is rendered');
     if(/<script|javascript:/i.test(html)) return fail(`the email holds something unsafe`);
     if(!html.includes('href="https://example.com"')) return fail('a safe link stays');
     pass('');
