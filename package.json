@@ -1,6 +1,6 @@
 {
   "name": "kempo-forms",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Contact and custom forms for kempo: build a form in the admin, place it on any page, keep every submission, and get it by email, with spam filters and hooks for captcha and other integrations",
   "license": "MIT",
   "author": "Dustin Poissant <dustinpoissant@gmail.com>",
