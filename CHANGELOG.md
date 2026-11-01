@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- A **Form** widget for kempo's page builder (`page_widgets`): choose a form from a list in the settings, optionally show its title as a heading, and it is saved as `<k-forms-form slug="..." heading="...">`. The editor shows a card for it, not the live form. Needs kempo 4.10.0 or later, which has the page builder. The Insert a form button of the older Content editor stays as it is.
+
 ## 0.1.0
 
 First release.

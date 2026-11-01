@@ -25,6 +25,34 @@
       "priority": 76
     }
   ],
+  "page_widgets": [
+    {
+      "key": "form",
+      "title": "Form",
+      "description": "A form made under Forms in the admin, shown and sent from this page.",
+      "iconSrc": "/forms/icons/assignment.svg",
+      "category": "interactive",
+      "keywords": ["contact", "survey", "questionnaire", "inquiry", "feedback", "submit"],
+      "tag": "k-forms-form",
+      "page_component": "/forms/components/Form.js",
+      "editor_component": "/admin/extension/kempo-forms/components/sitebuilder/FormWidgetEditor.js",
+      "editor_tag": "k-forms-form-editor",
+      "settings_component": "/admin/extension/kempo-forms/components/sitebuilder/FormWidgetSettings.js",
+      "settings_tag": "k-forms-form-settings",
+      "attributes": [
+        { "name": "slug", "type": "id", "label": "Form", "hint": "The address of the form, such as contact.", "default": "" },
+        { "name": "heading", "type": "select", "label": "Heading", "hint": "Show the form's title above it as a heading of this level.", "default": "0", "options": [
+          { "value": "0", "label": "No heading" },
+          { "value": "1", "label": "Heading 1" },
+          { "value": "2", "label": "Heading 2" },
+          { "value": "3", "label": "Heading 3" },
+          { "value": "4", "label": "Heading 4" },
+          { "value": "5", "label": "Heading 5" },
+          { "value": "6", "label": "Heading 6" }
+        ] }
+      ]
+    }
+  ],
   "hooks": {
     "user:deleted": "./hooks/userDeleted.js",
     "file:before_download": "./hooks/fileBeforeDownload.js"

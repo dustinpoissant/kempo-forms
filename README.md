@@ -41,7 +41,8 @@ Save once for the whole form with **Save form** at the top. A form can be paused
 ### Where the form appears
 
 - **Its own page** at `/forms/<address>`, unless turned off.
-- **Inside any page.** In the page editor's Content editor, the toolbar has an **Insert a form** button (the Assignment icon). It asks which form and puts a card in the editor that stands for it, with a link to the form's own page to edit it. The card is not editable in the page editor and saves as the element below. Writing the element by hand works too:
+- **Inside any page, with the page builder.** Add the **Form** widget (in Interactive): pick the form in the settings, and choose a heading level if its title should show above it. The editor shows a card for it instead of the live form; the page gets the element below.
+- **Inside any page, in the older Content editor.** In the page editor's Content editor, the toolbar has an **Insert a form** button (the Assignment icon). It asks which form and puts a card in the editor that stands for it, with a link to the form's own page to edit it. The card is not editable in the page editor and saves as the element below. Writing the element by hand works too:
 
 ```html
 <k-forms-form slug="contact"></k-forms-form>

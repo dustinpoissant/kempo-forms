@@ -40,7 +40,7 @@
     "sanitize-html": "^2.18.1"
   },
   "peerDependencies": {
-    "kempo": ">=4.9.13",
+    "kempo": ">=4.10.0",
     "kempo-server": ">=3.3.0",
     "kempo-ui": ">=0.7.0"
   },
