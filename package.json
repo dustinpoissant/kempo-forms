@@ -40,9 +40,9 @@
     "sanitize-html": "^2.18.1"
   },
   "peerDependencies": {
-    "kempo": ">=4.10.0",
+    "kempo": ">=4.10.2",
     "kempo-server": ">=3.3.0",
-    "kempo-ui": ">=0.7.0"
+    "kempo-ui": ">=1.0.0"
   },
   "peerDependenciesMeta": {
     "kempo-files": {
