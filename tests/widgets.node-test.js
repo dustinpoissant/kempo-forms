@@ -4,34 +4,32 @@ import { fileURLToPath, pathToFileURL } from 'url';
 
 /*
   The Form widget the page builder offers. kempo's own registry code cleans the declaration (so a declaration it would refuse
-  fails here and not in somebody's editor), and kempo's renderer and page reader take a page through the widget and back.
+  fails here and not in somebody's editor), and kempo-ui's page renderer takes a page through the widget, on the page and
+  in the editor. The kempo-ui modules are loaded from kempo's own copy, so they are the ones kempo's registry adds the
+  widget to.
 */
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const kempo = async relative => import(pathToFileURL(path.join(root, 'node_modules', 'kempo', relative)).href);
+const load = async file => import(pathToFileURL(file).href);
+const kempo = relative => load(path.join(root, 'node_modules', 'kempo', relative));
+const ui = relative => load(path.join(root, 'node_modules', 'kempo', 'node_modules', 'kempo-ui', 'src', relative));
 
 const config = JSON.parse(await readFile(path.join(root, 'kempo-config.json'), 'utf8'));
 const { normalizeExtensionWidget } = await kempo('server/utils/sitebuilder/registry.js');
-const { buildRegistry } = await kempo('src/kempo/sitebuilder/registry.js');
-const { renderLocation } = await kempo('src/kempo/sitebuilder/render.js');
-const { createNode } = await kempo('src/kempo/sitebuilder/nodes.js');
-const rebuild = (await kempo('server/utils/sitebuilder/rebuild.js')).default;
+const { widgets, addWidget, registryOf } = await ui('utils/pageWidgets.js');
+const { renderPage, collectModules } = await ui('utils/renderPage.js');
+const { createNode } = await ui('utils/pageTree.js');
 
 const [error, widget] = normalizeExtensionWidget('kempo-forms', config.page_widgets[0]);
-const registry = buildRegistry(error ? [] : [widget]);
-const ctx = { registry };
-const key = 'kempo-forms:form';
-
-const roundTrip = html => {
-  const [rebuildError, tree] = rebuild(html, registry);
-  return rebuildError ? { error: rebuildError.msg } : { tree, again: renderLocation(tree, ctx) };
-};
+if(!error) addWidget(widget);
+const registry = registryOf(widgets);
+const name = 'kempo-forms-form';
 
 export default {
   'the declaration is one kempo accepts': async ({ pass, fail }) => {
     if(config.page_widgets.length !== 1) return fail('expected the one Form widget');
     if(error) return fail(error.msg);
-    if(widget.key !== key || widget.tag !== 'k-forms-form') return fail(JSON.stringify([widget.key, widget.tag]));
+    if(widget.name !== name || widget.tag !== 'k-forms-form') return fail(JSON.stringify([widget.name, widget.tag]));
     pass('');
   },
 
@@ -54,26 +52,35 @@ export default {
   },
 
   'a form in a page is written as the element the form component reads': async ({ pass, fail }) => {
-    const plain = renderLocation([createNode(key, { slug: 'contact' })], ctx);
-    if(!plain.startsWith('<k-forms-form slug="contact"></k-forms-form>')) return fail(plain);
-    const headed = renderLocation([createNode(key, { slug: 'contact', heading: '2' })], ctx);
-    if(!headed.startsWith('<k-forms-form slug="contact" heading="2"></k-forms-form>')) return fail(headed);
+    const plain = renderPage([createNode(name, { slug: 'contact' })], registry);
+    if(!plain.startsWith('<k-forms-form') || !plain.includes('slug="contact"') || plain.includes('heading=')) return fail(plain);
+    const headed = renderPage([createNode(name, { slug: 'contact', heading: '2' })], registry);
+    if(!headed.includes('slug="contact"') || !headed.includes('heading="2"')) return fail(headed);
     pass('');
   },
 
-  'a page that holds a form reads back as the Form widget, and renders the same': async ({ pass, fail }) => {
-    for(const html of ['<k-forms-form slug="contact"></k-forms-form>', '<k-forms-form slug="quote" heading="1"></k-forms-form>']){
-      const { tree, again, error: readError } = roundTrip(html);
-      if(readError) return fail(readError);
-      if(tree.length !== 1 || tree[0].type !== key) return fail(JSON.stringify(tree));
-      if(!again.startsWith(html)) return fail(`${html} came back as ${again}`);
-    }
+  'a page that holds a form loads the form component, and the editor loads its own element as well': async ({ pass, fail }) => {
+    const nodes = [createNode(name, { slug: 'contact' })];
+    const onPage = collectModules(nodes, registry);
+    if(onPage.join() !== '/forms/components/Form.js') return fail(onPage.join());
+    const inEditor = collectModules(nodes, registry, { editor: true });
+    if(!inEditor.includes('/admin/extension/kempo-forms/components/sitebuilder/FormWidgetEditor.js')) return fail(inEditor.join());
     pass('');
   },
 
-  'the editor shows the card, not the form': async ({ pass, fail }) => {
-    const html = renderLocation([createNode(key, { slug: 'contact' })], { registry, editor: true });
-    if(!html.startsWith('<k-forms-form-editor slug="contact"')) return fail(html);
+  'the editor is written as its own element, with the same settings as the form': async ({ pass, fail }) => {
+    const html = renderPage([createNode(name, { slug: 'contact', heading: '2' })], registry, { editor: true });
+    if(!html.startsWith('<k-forms-form-editor') || !html.includes('slug="contact"') || !html.includes('heading="2"')) return fail(html);
+    pass('');
+  },
+
+  'the editor draws the form with the page\'s own component, and never sends it': async ({ pass, fail }) => {
+    const editor = await readFile(path.join(root, 'admin/components/sitebuilder/FormWidgetEditor.js'), 'utf8');
+    const form = await readFile(path.join(root, 'public/components/Form.js'), 'utf8');
+    if(!editor.includes("import Form from '/forms/components/Form.js'") || !editor.includes('extends Form') || !editor.includes('get editing()')) return fail('the editor does not draw the form itself');
+    if(editor.includes('sendForm') || editor.includes('render(){\n    return html`<div class="b r p">')) return fail('the editor is a card or sends');
+    if(!/submit = async event => \{\s*event\.preventDefault\(\);\s*if\(this\.editing\) return;/.test(form)) return fail('the form can be sent from the editor');
+    if(!form.includes('this.heading === 1 && !this.editing') || !form.includes("(this.editing ? '' :")) return fail('the editor changes the title of the page or reads the address');
     pass('');
   }
 };

@@ -3,6 +3,11 @@
   "git": "https://github.com/dustinpoissant/kempo-forms",
   "public-scope": "forms",
   "schema": "./server/db/schema.js",
+  "suggestedPeers": [
+    { "name": "kempo-smtp", "reason": "Email each submission to you, and a confirmation to the visitor, through your own SMTP server" },
+    { "name": "kempo-resend", "reason": "Email each submission through Resend (use this or kempo-smtp)" },
+    { "name": "kempo-files", "reason": "File upload fields on forms" }
+  ],
   "jobs": [
     {
       "name": "sweep",

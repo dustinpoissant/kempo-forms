@@ -1,4 +1,4 @@
-import WidgetSettings from '/kempo/sitebuilder/components/WidgetSettings.js';
+import WidgetSettings from '/kempo-ui/components/pagebuilder/WidgetSettings.js';
 import { html } from '/kempo-ui/lit-all.min.js';
 import { listForms } from '/forms/sdk.js';
 

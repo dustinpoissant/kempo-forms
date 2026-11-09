@@ -41,7 +41,7 @@ Save once for the whole form with **Save form** at the top. A form can be paused
 ### Where the form appears
 
 - **Its own page** at `/forms/<address>`, unless turned off.
-- **Inside any page, with the page builder.** Add the **Form** widget (in Interactive): pick the form in the settings, and choose a heading level if its title should show above it. The editor shows a card for it instead of the live form; the page gets the element below.
+- **Inside any page, with the page builder.** Add the **Form** widget (in Interactive): pick the form in the settings, and choose a heading level if its title should show above it. The editor draws the form itself, the same fields, heading and button a visitor sees, but pressing the button sends nothing (and a form that is not published, such as a draft, is not drawn, and the editor says so); the page gets the element below.
 - **Inside any page, in the older Content editor.** In the page editor's Content editor, the toolbar has an **Insert a form** button (the Assignment icon). It asks which form and puts a card in the editor that stands for it, with a link to the form's own page to edit it. The card is not editable in the page editor and saves as the element below. Writing the element by hand works too:
 
 ```html

@@ -94,11 +94,21 @@ export default class Form extends ShadowComponent {
   }
 
   /*
+    Overridable
+  */
+
+  /* Whether this is the page builder's copy, which draws the form but never sends it, and never reads a form from the address. */
+  get editing(){
+    return false;
+  }
+
+  /*
     Data
   */
 
   load = async () => {
-    const slug = this.slug || decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() || '');
+    const slug = this.slug || (this.editing ? '' : decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() || ''));
+    if(!slug) return;
     const [error, data] = await getPublicForm(slug);
     if(error || (!this.slug && !data.form.standalone)){
       this.phase = 'missing';
@@ -106,7 +116,7 @@ export default class Form extends ShadowComponent {
     }
     await Promise.all([...new Set(data.form.fields.map(field => MODULES[field.type]).filter(Boolean))].map(path => import(path)));
     this.definition = data.form;
-    if(this.heading === 1) document.title = data.form.title;
+    if(this.heading === 1 && !this.editing) document.title = data.form.title;
     this.values = Object.fromEntries(data.form.fields.filter(field => field.type === 'checkbox' || field.type === 'toggle').map(field => [field.key, false]));
     this.phase = data.form.closed ? 'closed' : 'ready';
   };
@@ -173,6 +183,7 @@ export default class Form extends ShadowComponent {
 
   submit = async event => {
     event.preventDefault();
+    if(this.editing) return;
     const form = event.currentTarget;
     if(!form.reportValidity()) return;
 
