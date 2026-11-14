@@ -97,6 +97,15 @@ The messages come from `emails/submission-notification.page.html` and `emails/su
 
 The notification's Reply-To is the address the visitor gave in the form's email field, so replying to it goes to them. This needs a kempo release after 4.9.12 and a sender that supports it (kempo-resend and kempo-smtp do, from the versions that came with it); with an older kempo or sender the header is simply left off, and the notification also shows the visitor's address as a link in the body. The confirmation email to the visitor has no Reply-To.
 
+## Notifications in the admin
+
+A new submission raises a kempo notification (a `notice`, in the bell and the history) for everyone who holds `forms:submissions:view`. It does not depend on email, so it works with no email extension installed.
+
+It is one notice per form, not one per submission, so a busy form does not bury everything else. Each new submission refreshes it and re-opens it for everyone, and it says how many submissions are waiting to be read; that count is what is still marked new, so it falls as they are read. It links to the submission when there is one, and to the list when there are several. Spam is never announced.
+
+Needs `kempo >= 4.15.0`.
+
+
 ## Spam
 
 1. **Honeypot.** A hidden field named `website_url`. A bot that fills it gets a normal success answer and the submission is kept as spam.

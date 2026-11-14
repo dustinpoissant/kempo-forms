@@ -10,6 +10,7 @@ import { removeFiles, storeFiles } from '../files/uploads.js';
 import { recordAttempt } from '../spam/rateLimit.js';
 import { runRules } from '../spam/rules.js';
 import { sendConfirmation, sendNotifications } from '../notify/deliver.js';
+import notifyStaff from '../notify/staff.js';
 import { addEvent } from './events.js';
 import normalise from './normalise.js';
 import { cleanVerdict, decide } from './verdicts.js';
@@ -123,6 +124,7 @@ export default async ({ slug, values = {}, extras = {}, files = {}, meta = {}, a
   }
 
   await notify('submission:saved', { submission, form, actor });
+  await notifyStaff({ submission, form });
 
   const deliver = async () => {
     if(submission.status !== 'new') return;

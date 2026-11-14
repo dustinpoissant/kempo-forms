@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+Requires kempo 4.15.0 or later, for the notification types.
+
+### Added
+
+- **A new submission raises a notice in the admin** for everyone who holds `forms:submissions:view`, with no email extension needed. It is one notice per form, refreshed (and re-opened) by each new submission, and it says how many are waiting, which falls as they are read. Spam is never announced. It links to the submission, or to the list when several are waiting.
+
 ## [0.3.0] - 2026-11-09
 
 Requires kempo 4.11.0 or later.
